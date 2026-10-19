@@ -1,0 +1,90 @@
+.p {
+   background: url(img/Back.jpg) no-repeat fixed center;
+   background-size: cover;
+}
+body {
+  margin: 0;
+  min-height: 100vh;          /* ต้องมี ไม่งั้นไม่มีความสูงให้จัดกลาง */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;    /* กลางแนวตั้ง */
+  align-items: center;        /* กลางแนวนอน */
+}
+img {
+    
+  width: 40vw;
+  max-width: 520px;
+  height: auto;          /* สูงตามสัดส่วนรูปเอง */
+
+
+    
+}
+a, a:visited, a:hover, a:active {
+  text-decoration: none;
+  color: #000;
+}
+
+.c {
+  font-family: "Pinyon Script", cursive;
+  font-size: 44px;        /* ใหญ่ขึ้น เส้นจะดูหนาขึ้นตาม */
+  color: #000;
+  margin: 0 0 10px;
+  text-align: center;
+  -webkit-text-stroke: 0.8px #000;
+}
+.hearts {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.hearts span {
+  position: absolute;
+  bottom: -40px;
+  color: #f4a6bf;
+  opacity: 0;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-110vh) translateX(40px) rotate(25deg); opacity: 0; }
+}
+
+.card, h1, .divider { position: relative; z-index: 1; }
+
+#fade {
+  position: fixed;
+  inset: 0;
+  background: #fff;          /* สีฉาก: ขาว หรือเปลี่ยนเป็น #fde4ec (ชมพูอ่อน) */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+  z-index: 999;
+}
+#fade.show { opacity: 1; }
+.hearts {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;   /* ไม่บังการคลิกซอง */
+  overflow: hidden;
+  z-index: 1;
+}
+.hearts span {
+  position: absolute;
+  bottom: -40px;
+  color: #f4a6bf;
+  opacity: 0;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-110vh) translateX(40px) rotate(25deg); opacity: 0; }
+}
+
+/* ซองต้องอยู่เหนือหัวใจ หรือให้หัวใจอยู่ข้างหลัง */
+.wrap { position: relative; z-index: 2; }

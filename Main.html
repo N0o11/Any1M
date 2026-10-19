@@ -1,12 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Mali:wght@400;500&display=swap" rel="stylesheet">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="Main..css">
+    <style>
+
+
+
+  @keyframes pageIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes fog {
+    from { opacity: 0; filter: blur(20px); letter-spacing: 12px; }
+    to   { opacity: 1; filter: blur(0);    letter-spacing: 2px; }
+  }
+</style>
 </head>
 <body>
-    
+    <div class="player">
+  <button id="playBtn">▶</button>
+  <span id="cur">0:00</span>
+  <input type="range" id="seek" value="0" min="0" step="0.1">
+  <span id="dur">0:00</span>
+  <button id="muteBtn">🔊</button>
+  <input type="range" id="vol" min="0" max="1" step="0.05" value="0.5">
+</div>
+
+<audio id="bgm" src="music/song.mp3" loop></audio>
+
+<script>
+  const bgm = document.getElementById('bgm');
+  const playBtn = document.getElementById('playBtn');
+  const seek = document.getElementById('seek');
+  const cur = document.getElementById('cur');
+  const dur = document.getElementById('dur');
+  const muteBtn = document.getElementById('muteBtn');
+  const vol = document.getElementById('vol');
+
+  bgm.volume = 0.5;
+
+  const fmt = s => {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60).toString().padStart(2, '0');
+    return m + ':' + sec;
+  };
+
+  // ความยาวเพลง
+  bgm.addEventListener('loadedmetadata', () => {
+    seek.max = bgm.duration;
+    dur.textContent = fmt(bgm.duration);
+  });
+
+  // อัปเดตแถบตามเวลาเล่น
+  bgm.addEventListener('timeupdate', () => {
+    seek.value = bgm.currentTime;
+    cur.textContent = fmt(bgm.currentTime);
+    seek.style.setProperty('--pct', (bgm.currentTime / bgm.duration * 100) + '%');
+  });
+
+  // ลากแถบเพื่อข้ามไปช่วงที่ต้องการ
+  seek.addEventListener('input', () => {
+    bgm.currentTime = seek.value;
+  });
+
+  // เล่น/หยุด
+  playBtn.addEventListener('click', () => {
+    bgm.paused ? bgm.play() : bgm.pause();
+  });
+  bgm.addEventListener('play',  () => playBtn.textContent = '⏸');
+  bgm.addEventListener('pause', () => playBtn.textContent = '▶');
+
+  // เสียง
+  vol.addEventListener('input', () => {
+    bgm.volume = vol.value;
+    bgm.muted = false;
+    muteBtn.textContent = vol.value == 0 ? '🔇' : '🔊';
+  });
+  muteBtn.addEventListener('click', () => {
+    bgm.muted = !bgm.muted;
+    muteBtn.textContent = bgm.muted ? '🔇' : '🔊';
+  });
+
+  // พยายามเล่นอัตโนมัติ ถ้าโดนบล็อกให้รอคลิกครั้งแรก
+  bgm.play().catch(() => {
+    document.addEventListener('click', () => bgm.play(), { once: true });
+  });
+</script>
+<audio id="bgm" src="music/song.mp3" loop></audio>
+<script>
+  const bgm = document.getElementById('bgm');
+  bgm.currentTime = parseFloat(sessionStorage.getItem('bgmTime')) || 0;
+  bgm.play().catch(() => {
+    document.addEventListener('click', () => bgm.play(), { once: true });
+  });
+</script>
+
+    <h1 >Anniversary 1M</h1>
+    <div class="divider"><span>♡</span></div>
+    <div class="card">
+        <span class="bow bow-tl">*</span>
+        <span class="bow bow-tr">*</span>
+
+        <p >Hap Anniversary First Month เย่นี้ก็เดือนแรกแล้วที่เราคบกันัััั นี้แนะที่เค้าบอกเรียนโค้ดเอามาเขียนให้พี่เรนี้แนะเค้าอยากทำให้พี่มันดูน่ารักดีแถมเปิดดูได้ตลอดด้วย ตอนคบกับพี่เค้าแบบโอโหรู้สึกเป้นตัวเองที่สุดที่แรกที่ไปด้วยกันก้คงเป้นเซเว่นน้ะที่มาเซเว่นคงเพราะอยากอยู่กับพี่ให้นานนานแล้วพี่ก้อยากมาด้วย วันที่คบกันก้โอ้ยเค้าขอตอนเพื่อนพี่อ้วกตอนนี้เค้าอยากบีบคอตัวเองมาก  </p>
+        <p >ที่เค้าอยากจะบอกคือ...เค้ารักพี่เรด้ามากมากเค้าอยากอยู่กับพี่เรด้าไปตลอดเลยมีปัญหาไรก็คุยกันตรงตรงนะที่รักเค้าพร้อมปรับความเข้าใจพร้อมทุกอย่างเค้าแค่อยากอยู่กับพี่ไปตลอด เนี่ยรอเลยเค้าจะไปเป่าหูคุนแม่จนได้มาบ้านเร้วขึ้นใหได</p>
+        <p class="date">21/09/69</p>
+
+        <span class="bow bow-bl">*</span>
+  <span class="bow bow-br">*</span>
+    </div>
+    <div class="hearts" id="hearts"></div>
+
+<script>
+  const box = document.getElementById('hearts');
+  for (let i = 0; i < 14; i++) {
+    const h = document.createElement('span');
+    h.textContent = Math.random() > 0.5 ? '♡' : '♥';
+    h.style.left = Math.random() * 100 + '%';
+    h.style.fontSize = (12 + Math.random() * 18) + 'px';
+    h.style.animationDuration = (9 + Math.random() * 8) + 's';
+    h.style.animationDelay = (Math.random() * 10) + 's';
+    box.appendChild(h);
+  }
+</script>
+
+<img class="sticker" src="img/sta-removebg-preview.png" alt="">
+<img class="corner corner-bl" src="img/sta-removebg-preview.png" alt="">
+
+<img class="side-photo" src="img/phott.jpg" alt="">
+<figure class="side-photo">
+  <span class="tape"></span>
+  <img src="img/photobooth.png" alt="">
+  <figcaption>Us </figcaption>
+</figure>
+</div>
 </body>
 </html>

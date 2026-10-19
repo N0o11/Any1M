@@ -1,7 +1,306 @@
 body {
-   background: url(img/พื้นหลัง2.jpg) no-repeat fixed center;
-   background-size: cover;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;   /* ชิดบน แทน center */
+  align-items: center;
+  padding: 60px 20px 120px;      /* บน 60px, ล่าง 120px กันชนกับเพลเยอร์ */
+  background: url("img/Back.jpg") no-repeat fixed center;
+  background-size: cover;
+  animation: pageIn 1s ease forwards;
+} 
+
+  h1 {
+    text-shadow: 0 0 18px rgba(255, 182, 205, 0.9), 0 0 4px #fff;
+    font-family: "Pinyon Script", "Great Vibes", cursive;
+    font-size: 70px;
+    opacity: 0;
+    filter: blur(20px);                   /* เบลอเหมือนหมอก */
+    animation: fog 2s ease 0.5s forwards; /* รอ 0.5 วิ แล้วค่อยๆ ชัด */
+    color: black;
 }
-div {
-    background-color: palevioletred;
+#musicBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border: none;
+  background: rgba(255,255,255,0.7);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 22px;
+  cursor: pointer;
+}
+.player {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(6px);
+  border-radius: 40px;
+  box-shadow: 0 4px 14px rgba(194, 86, 122, 0.25);
+  font-family: sans-serif;
+  font-size: 13px;
+  color: #c2567a;
+  z-index: 10;
+}
+
+#muteBtn {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(194, 86, 122, 0.12);
+  color: #c2567a;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease, color 0.25s ease;
+}
+
+#muteBtn:hover {
+  background: #c2567a;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+#muteBtn:active { transform: scale(0.95); }
+
+/* คลื่นเสียงขยับเบาๆ ตอนมีเสียง */
+#muteBtn .wave { animation: pulse 1.4s ease-in-out infinite; }
+#muteBtn .w2   { animation-delay: 0.25s; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 1; }
+}
+
+/* ขีดฆ่าซ่อนไว้ก่อน */
+#muteBtn .slash { opacity: 0; transition: opacity 0.2s; }
+
+/* ตอนปิดเสียง: โชว์ขีดฆ่า ซ่อนคลื่น */
+#muteBtn.muted .slash { opacity: 1; }
+#muteBtn.muted .wave  { opacity: 0; animation: none; }  
+
+/* แถบเลื่อน */
+.player input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: #f3c6d4;
+  outline: none;
+  cursor: pointer;
+}
+
+#seek {
+  width: 220px;
+  --pct: 0%;
+  background: linear-gradient(to right, #c2567a var(--pct), #f3c6d4 var(--pct));
+}
+
+#vol { width: 70px; }
+
+.player input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #c2567a;
+}
+.player input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: #c2567a;
+}
+.card {
+  width: min(680px, calc(100% - 48px));  /* ห่างขอบจอซ้ายขวาเท่ากันอย่างน้อย 24px */
+  margin: 30px auto 0;                   /* อยู่กลางพอดี สมมาตร */
+  padding: 36px 40px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(4px);
+  border: 2px solid #f3c6d4;
+  border-radius: 28px;                   /* มุมโค้งมน ไม่แหลม */
+  box-shadow:
+    0 0 0 8px rgba(255, 255, 255, 0.55), /* ขอบนอกชั้นที่สอง */
+    0 0 0 10px #f7d6e0,
+    0 10px 30px rgba(194, 86, 122, 0.18);
+  text-align: center;
+}
+
+.card p {
+  font-family: "Mali", cursive;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 2;
+  color: #8a3a58;                        /* ชมพูเข้มอมม่วง อ่านง่ายบนพื้นอ่อน */
+  margin: 0 0 18px;
+}
+
+.card .date {
+  font-family: "Pinyon Script", cursive;
+  font-size: 30px;
+  color: #c2567a;
+  margin: 24px 0 0;
+}
+
+/* มือถือ */
+@media (max-width: 520px) {
+  .card { padding: 26px 22px; border-radius: 22px; }
+  .card p { font-size: 16px; }
+}
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: min(320px, 70%);
+  margin: 6px auto 8px;
+  color: #e58aa8;
+  font-size: 22px;
+}
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #f0a9c0, transparent);
+}
+.hearts {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.hearts span {
+  position: absolute;
+  bottom: -40px;
+  color: #f4a6bf;
+  opacity: 0;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-110vh) translateX(40px) rotate(25deg); opacity: 0; }
+}
+
+.card, h1, .divider { position: relative; z-index: 1; }
+
+@keyframes fog {
+  from { opacity: 0; filter: blur(14px); }
+  to   { opacity: 1; filter: blur(0); }
+}
+
+/* ย่อหน้าในการ์ดค่อยๆ ขึ้นทีละบรรทัด */
+.card p {
+  opacity: 0;
+  animation: fog 3s ease forwards;
+}
+.card p:nth-of-type(1) { animation-delay: 1.5s; }
+.card p:nth-of-type(2) { animation-delay: 3s; }
+.card p.date           { animation-delay: 4.5s; }
+
+.card {
+  opacity: 0;
+  animation: cardIn 1.2s ease 0.8s forwards;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.sticker {
+  position: absolute;
+  top: -40px;
+  right: -30px;
+  width: 250px;
+  transform: rotate(12deg);
+  filter: drop-shadow(0 4px 6px rgba(194, 86, 122, 0.3));
+}
+.corner {
+  position: absolute;
+  width: 250px;
+  pointer-events: none;      /* ไม่บังการคลิก */
+  z-index: 3;
+  filter: drop-shadow(0 4px 8px rgba(194, 86, 122, 0.3));
+  opacity: 0;
+  animation: fog 2s ease 1s forwards;
+}
+
+.corner-bl {
+  bottom: 16px;
+  left: 16px;
+  transform: rotate(8deg) scaleX(-1);
+}
+@media (max-width: 600px) {
+  .corner { width: 80px; }
+}
+.side-photo {
+  position: absolute;
+  top: 240px;
+  right: 6vw;
+  width: 170px;
+  margin: 0;
+  padding: 10px 10px 8px;
+  background: #fff;
+  border-radius: 14px;                 /* มุมมนเหมือนการ์ด */
+  border: 2px solid #f3c6d4;
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.55),
+    0 0 0 8px #f7d6e0,                 /* กรอบสองชั้นเหมือนการ์ด */
+    0 10px 24px rgba(194, 86, 122, 0.25);
+  text-align: center;
+  transform: rotate(4deg);
+  opacity: 0;
+  animation: fog 2s ease 2s forwards, sway 6s ease-in-out 4s infinite;
+  z-index: 2;
+}
+
+.side-photo img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.side-photo figcaption {
+  font-family: "Pinyon Script", cursive;
+  font-size: 24px;
+  color: #c2567a;
+  margin-top: 6px;
+}
+
+/* เทปกาวสีชมพูบนหัวรูป */
+.side-photo .tape {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  width: 70px;
+  height: 24px;
+  transform: translateX(-50%) rotate(-3deg);
+  background: rgba(244, 166, 191, 0.7);
+  border-left: 2px dotted rgba(255, 255, 255, 0.8);
+  border-right: 2px dotted rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 4px rgba(194, 86, 122, 0.2);
+}
+
+/* โยกเบาๆ */
+@keyframes sway {
+  0%, 100% { transform: rotate(4deg) translateY(0); }
+  50%      { transform: rotate(2deg) translateY(-6px); }
+}
+
+@media (max-width: 1100px) {
+  .side-photo { display: none; }
 }
